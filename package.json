@@ -1,15 +1,16 @@
 {
   "name": "quick-mafs",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Quick mafs game",
+  "main": "dist/index.js",
   "scripts": {
     "test": "mocha",
     "test:coverage": "c8 npm run test"
   },
-  "keywords": [],
+  "keywords": ["fun"],
   "type": "module",
-  "author": "",
+  "author": "nopeless",
+  "repository": "https://github.com/nopeless/quick-mafs",
   "license": "ISC",
   "devDependencies": {
     "@types/chai": "^4.3.0",
