@@ -7,19 +7,12 @@ jobs:
       - name: Check out Git repository
         uses: actions/checkout@v2
 
-      - name: Set head
-        run: git remote set-head origin main
-
-      - name: Read .nvmrc
-        run: echo "##[set-output name=NVMRC;]$(cat .nvmrc)"
-        id: nvm
-
       - name: Set up Node.js
         uses: actions/setup-node@v1
         with:
           node-version: ${{ steps.nvm.outputs.NVMRC }}
 
-      - name: npm ci
+      - name: install stuff
         run: npm ci
 
       - name: run lint
@@ -30,43 +23,5 @@ jobs:
           eslint: true
           auto_fix: true
       
-      - name: setup test
-        run: echo "" > .test.env
-
-      - name: initiate mongo
-        uses: supercharge/mongodb-github-action@1.3.0
-        with:
-          mongodb-version: 4.4.2
-      
-      - name: Load mongo
-        run: npm run mongoreset -- mongodb://127.0.0.1:27017/database-test
-
-      - name: initialize with default configs
-        run: npm run setup
-        env:
-          PORT: 4000
-
-      - name: run scripts (nothing should error)
-        run: >
-          npm run help:env &&
-          npm run benchmark &&
-          npm run mongodump mongodb://127.0.0.1:27017/database-test
-
-      - name: run 0 config
+      - name: tests
         run: npm test
-
-      - name: run locov
-        run: npm run locov
-        env:
-          DISCORD_CLIENT_SECRET: ${{ secrets.DISCORD_CLIENT_SECRET }}
-          DISCORD_BOT_TOKEN: ${{ secrets.DISCORD_BOT_TOKEN }}
-          DISCORD_CLIENT_ID: ${{ secrets.DISCORD_CLIENT_ID }}
-          MONGODB_URL: mongodb://127.0.0.1:27017/database-test
-          STEM_INFORMATION_URL: mongodb://127.0.0.1:27017/information-test
-          PORT: 4000
-          LOGGING_ABSOLUTE: "true"
-
-      - name: Coveralls
-        uses: coverallsapp/github-action@master
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
